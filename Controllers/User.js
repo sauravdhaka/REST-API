@@ -38,5 +38,19 @@ exports.loginUser = async (req,res)=>{
 
 
 exports.updateUser = async (req,res)=>{
+    try {
+        const user = await User.findByIdAndUpdate(req.user._id,req.body,{new:true})
+        res.status(200).json(user)
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
 
+exports.deleteUser = async (req,res)=>{
+    try {
+        const user = await User.findByIdAndRemove(req.user._id)
+        res.status(200).json({user,message:'User successfully deleted'})
+    } catch (error) {
+        res.status(400).json(error)
+    }
 }
