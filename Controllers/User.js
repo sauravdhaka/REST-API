@@ -54,3 +54,19 @@ exports.deleteUser = async (req,res)=>{
         res.status(400).json(error)
     }
 }
+
+exports.forgotPassword = async (req,res)=>{
+    try {
+        const user = await User.findOne({username:req.body.username})
+        if(user){
+            user.password = req.body.password
+            await user.save()
+            res.status(200).json('Password successfully updated')
+        }
+        else{
+            res.status(401).json('no such user exists')
+        }
+    } catch (error) {
+        res.status(401).json(error)
+    }
+}
