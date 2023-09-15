@@ -32,27 +32,15 @@ exports.createUser = async (req,res)=>{
 
 // Login api function for user {user can login with username and password}
 exports.loginUser = async (req,res)=>{
-    try {
-        const {username,password} = req.body;
-        // checking in database that username eixits or not
-        const user = await User.findOne({username})
-        if(!user){
-            res.status(401).json('THis user is not exits') // if not then sendin this response
-        }
-        else{
-            // if username exists then we are comparing the passswor which user provide and password stored in database
-            if(user.password !== password){
-                res.status(401).json('Invalid Password')// if password not match then sending response as Invalid password
-            }
-            else{
-                // If password match then we are genreating the jwt token and sending it back as response
-                const token = jwt.sign({ _id: user.id }, jwt_sceret);
-                res.status(200).json(token)
-            }
-        }
-    } catch (error) {
-        res.status(401).json(error) // In case of error
-    }
+    const user = req.user;
+    res
+      .cookie("jwt", user.token, {
+        expires: new Date(Date.now() + 3600000),
+        httpOnly: true,
+      })
+      .status(201)
+      .json({ id: user.id});
+  
 }
 
 
@@ -60,11 +48,14 @@ exports.loginUser = async (req,res)=>{
 // Update user api function where user can update username and passsword
 // for updating the user must have logged In
 exports.updateUser = async (req,res)=>{
-    try {
-        const user = await User.findByIdAndUpdate(req.user._id,req.body,{new:true})
+    const {id} = req.params;
+   
+    try{
+        const user = await User.findByIdAndUpdate(id,req.body,{new:true})
         res.status(200).json(user)
-    } catch (error) {
-        res.status(400).json(error)// In case of error
+    }
+    catch(err){
+        res.status(400).json(err)
     }
 }
 
@@ -72,8 +63,9 @@ exports.updateUser = async (req,res)=>{
 // deleting user form database 
 // for deleting user must have loggedIn
 exports.deleteUser = async (req,res)=>{
+    const userId = req.params.id
     try {
-        const user = await User.findByIdAndRemove(req.user._id)
+        const user = await User.findByIdAndRemove(userId)
         res.status(200).json({user,message:'User successfully deleted'})
     } catch (error) {
         res.status(400).json(error)

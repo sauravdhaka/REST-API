@@ -4,16 +4,25 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const userRouter = require("./Routes/User");
 const { User } = require("./models/User");
-const {sanitizeUser} = require('./services/common')
+const {sanitizeUser , cookieExtractor} = require('./services/common')
 const jwt = require('jsonwebtoken')
 const session = require("express-session");
+const JwtStrategy = require("passport-jwt").Strategy;
+const cookieParser = require('cookie-parser');
+
+
 
 const jwt_sceret = "lalala";
+
+const opts = {};
+opts.jwtFromRequest = cookieExtractor
+opts.secretOrKey = jwt_sceret; 
 
 const app = express(); // creating server
 app.get("/", (req, res) => {
   res.json("HELLO");
 });
+app.use(cookieParser())
 app.use(
     session({
       secret: 'keyboard cat',
@@ -49,6 +58,24 @@ passport.use(
     }
   })
 );
+
+passport.use(
+    "jwt",
+    new JwtStrategy(opts, async function (jwt_payload, done) {
+      console.log({ jwt_payload });
+      try {
+        const user = await User.findById(jwt_payload.id);
+        if (user) {
+          return done(null, sanitizeUser(user)); // This calls the serializer
+        } else {
+          return done(null, false);
+        }
+      } catch (err) {
+        return done(err, false);
+      }
+    })
+  );
+  
 
 // this creates session variable req.user on being called from callbacks
 passport.serializeUser(function (user, cb) {
