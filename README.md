@@ -5,7 +5,7 @@ To run this project
 2) run the command to install all the depedencies - npm install
 3) run npm start
 
-You can test API's in Postman/ThunderClien
+You can test API's in Postman/ThunderClient
 I am attaching the screenshots of api testing
 1) create-user api :-
 ![alt text](https://github.com/sauravdhaka/REST-API/assets/71395329/3e364805-a223-4d5d-b87f-8e84164bd9f9)
@@ -20,3 +20,11 @@ I am attaching the screenshots of api testing
    ![alt text](https://github.com/sauravdhaka/REST-API/assets/71395329/806b413c-d889-4d3c-a8d8-42c24c391a22)
 5) forgot-password api:-
    ![alt text](https://github.com/sauravdhaka/REST-API/assets/71395329/7e661060-6f11-4d08-852a-3ceb0811915b)
+
+
+STEPS TO DEPLOY :-
+1) Need to create a UI for IT
+2) In index.js we add app.use(express.static())
+3) Hosting Environment
+4) Configure Environment Variables
+5) Your app is ready to be deployed 
