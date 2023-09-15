@@ -22,9 +22,9 @@ I am attaching the screenshots of api testing
    ![alt text](https://github.com/sauravdhaka/REST-API/assets/71395329/7e661060-6f11-4d08-852a-3ceb0811915b)
 
 
-STEPS TO DEPLOY :-
-1) Need to create a UI for IT
-2) In index.js we add app.use(express.static())
-3) Hosting Environment
-4) Configure Environment Variables
-5) Your app is ready to be deployed 
+STEPS TO DEPLOY In Vercel :-
+1) Create a vercel.json file in your project directory and specifies the routes.
+2) Create an account on vercel using github
+3) Select the github repo which you want to deploy
+4) add all the environment variables.
+5) And Deploy
